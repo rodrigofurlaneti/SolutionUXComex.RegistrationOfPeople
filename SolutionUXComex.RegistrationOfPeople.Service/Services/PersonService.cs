@@ -2,6 +2,8 @@
 using SolutionUXComex.RegistrationOfPeople.Service.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Domain.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Domain.Entities;
+using System.Net;
+using System;
 
 namespace SolutionUXComex.RegistrationOfPeople.Service.Services
 {
@@ -23,6 +25,12 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                Address = person.Address,
+                Number = person.Number,
+                Complement = person.Complement,
+                Neighborhood = person.Neighborhood,
+                City = person.City,
+                State = person.State,
                 CreatedAt = person.CreatedAt,
                 UpdatedAt = person.UpdatedAt,
                 Active = person.Active
@@ -76,6 +84,12 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                Address = person.Address,
+                Number = person.Number,
+                Complement = person.Complement,
+                Neighborhood = person.Neighborhood,
+                City = person.City,
+                State = person.State,
                 CreatedAt = person.CreatedAt,
                 UpdatedAt = person.UpdatedAt,
                 Active = person.Active
@@ -91,6 +105,12 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                Address = person.Address,
+                Number = person.Number,
+                Complement = person.Complement,
+                Neighborhood = person.Neighborhood,
+                City = person.City,
+                State = person.State,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Active = person.Active
@@ -104,6 +124,12 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
             existingEntity.Name = personDto.Name;
             existingEntity.Cpf = personDto.Cpf;
             existingEntity.Phone = personDto.Phone;
+            existingEntity.Address = personDto.Address;
+            existingEntity.Number = personDto.Number;
+            existingEntity.Complement = personDto.Complement;
+            existingEntity.Neighborhood = personDto.Neighborhood;
+            existingEntity.City = personDto.City;
+            existingEntity.State = personDto.State;
             existingEntity.UpdatedAt = DateTime.Now;
             existingEntity.Active = personDto.Active;
             return existingEntity;
