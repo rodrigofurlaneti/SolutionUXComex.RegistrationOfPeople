@@ -4,6 +4,7 @@ using SolutionUXComex.RegistrationOfPeople.Domain.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Domain.Entities;
 using System.Net;
 using System;
+using System.Reflection.Emit;
 
 namespace SolutionUXComex.RegistrationOfPeople.Service.Services
 {
@@ -25,6 +26,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                ZipCode = person.ZipCode,
                 Address = person.Address,
                 Number = person.Number,
                 Complement = person.Complement,
@@ -84,6 +86,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                ZipCode = person.ZipCode,
                 Address = person.Address,
                 Number = person.Number,
                 Complement = person.Complement,
@@ -105,6 +108,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 Name = person.Name,
                 Cpf = person.Cpf,
                 Phone = person.Phone,
+                ZipCode = person.ZipCode,
                 Address = person.Address,
                 Number = person.Number,
                 Complement = person.Complement,
@@ -125,6 +129,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
             existingEntity.Cpf = personDto.Cpf;
             existingEntity.Phone = personDto.Phone;
             existingEntity.Address = personDto.Address;
+            existingEntity.ZipCode = personDto.ZipCode;
             existingEntity.Number = personDto.Number;
             existingEntity.Complement = personDto.Complement;
             existingEntity.Neighborhood = personDto.Neighborhood;
