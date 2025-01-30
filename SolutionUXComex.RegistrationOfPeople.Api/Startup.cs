@@ -15,7 +15,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<UXComexAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             SolutionUXComex.RegistrationOfPeople.Api.DependencyInjection.DependencyInjection.RegisterServices(services);

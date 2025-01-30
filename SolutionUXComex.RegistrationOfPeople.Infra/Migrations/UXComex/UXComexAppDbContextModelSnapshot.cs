@@ -8,15 +8,16 @@ using SolutionUXComex.RegistrationOfPeople.Infra.Data;
 
 #nullable disable
 
-namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations
+namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations.UXComex
 {
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(UXComexAppDbContext))]
+    partial class UXComexAppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("UXComex")
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -81,7 +82,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Person");
+                    b.ToTable("Person", "UXComex");
                 });
 #pragma warning restore 612, 618
         }

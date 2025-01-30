@@ -9,16 +9,17 @@ using SolutionUXComex.RegistrationOfPeople.Infra.Data;
 
 #nullable disable
 
-namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations
+namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations.UXComex
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20250129203221_MigrationInitialAddAddress")]
-    partial class MigrationInitialAddAddress
+    [DbContext(typeof(UXComexAppDbContext))]
+    [Migration("20250130010847_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("UXComex")
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -77,9 +78,13 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Person");
+                    b.ToTable("Person", "UXComex");
                 });
 #pragma warning restore 612, 618
         }

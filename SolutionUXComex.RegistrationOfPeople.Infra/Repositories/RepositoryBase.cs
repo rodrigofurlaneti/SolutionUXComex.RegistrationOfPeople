@@ -6,9 +6,9 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected readonly AppDbContext _context;
+        protected readonly UXComexAppDbContext _context;
 
-        public RepositoryBase(AppDbContext context)
+        public RepositoryBase(UXComexAppDbContext context)
         {
             _context = context;
         }
