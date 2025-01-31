@@ -11,6 +11,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Mappers
             return new AddressEntity
             {
                 Id = dto.Id,
+                PersonId = dto.PersonId,
                 ZipCode = dto.ZipCode,
                 Address = dto.Address,
                 Number = dto.Number,
@@ -26,6 +27,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Mappers
             return new AddressDto
             {
                 Id = entity.Id,
+                PersonId = entity.PersonId,
                 ZipCode = entity.ZipCode,
                 Address = entity.Address,
                 Number = entity.Number,

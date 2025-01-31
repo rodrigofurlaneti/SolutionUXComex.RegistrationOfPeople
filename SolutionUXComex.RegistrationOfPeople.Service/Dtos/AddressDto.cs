@@ -3,6 +3,7 @@
     public class AddressDto
     {
         public int Id { get; set; }
+        public int PersonId { get; set; }
         public string Cpf { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;

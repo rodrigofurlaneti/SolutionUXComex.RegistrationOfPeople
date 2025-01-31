@@ -6,6 +6,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Domain.Entities
     [Table("Addresses")] // Mapeia a classe para a tabela "Addresses"
     public class AddressEntity : BaseEntity
     {
+        public int PersonId { get; set; }
         public string ZipCode { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Number { get; set; } = string.Empty;
