@@ -33,6 +33,9 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
 
         public async Task<int> AddAsync(PersonDto personDto)
         {
+            personDto.CreatedAt = DateTime.Now;
+            personDto.UpdatedAt = DateTime.Now;
+            personDto.Active = true;
             var personEntity = PersonMapper.ToEntity(personDto);
             return await _repository.AddReturnIdAsync(personEntity);
         }
@@ -44,6 +47,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
                 return false;
 
             var updatedEntity = PersonMapper.ToEntity(personDto);
+            updatedEntity.UpdatedAt = DateTime.Now;
             await _repository.UpdateAsync(updatedEntity);
             return true;
         }
