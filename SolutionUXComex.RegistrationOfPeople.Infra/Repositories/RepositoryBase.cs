@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Data.Common;
 using Microsoft.Extensions.Logging;
 using SolutionUXComex.RegistrationOfPeople.Domain.Interfaces;
+using static Dapper.Contrib.Extensions.SqlMapperExtensions;
+using System.Reflection;
 
 namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
 {
@@ -23,7 +25,8 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"SELECT * FROM {typeof(T).Name} WHERE Id = @Id";
+                string tableName = TableNameHelper.GetTableName<T>();
+                string sql = $"SELECT * FROM {tableName} WHERE Id = @Id";
                 return await _dbConnection.QueryFirstOrDefaultAsync<T>(sql, new { Id = id });
             }
             catch (DbException ex)
@@ -37,7 +40,8 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"SELECT COUNT(1) FROM {typeof(T).Name} WHERE Name = @Name";
+                string tableName = TableNameHelper.GetTableName<T>();
+                string sql = $"SELECT COUNT(1) FROM {tableName} WHERE Name = @Name";
                 int count = await _dbConnection.ExecuteScalarAsync<int>(sql, new { Name = name });
                 return count > 0;
             }
@@ -52,7 +56,8 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"SELECT * FROM {typeof(T).Name}";
+                string tableName = TableNameHelper.GetTableName<T>();
+                string sql = $"SELECT * FROM {tableName}";
                 return await _dbConnection.QueryAsync<T>(sql);
             }
             catch (DbException ex)
@@ -66,7 +71,22 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"INSERT INTO {typeof(T).Name} DEFAULT VALUES;";
+                string tableName = TableNameHelper.GetTableName<T>();
+
+                // Obtém as propriedades da entidade
+                var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.Name != "Id") // Ignora a propriedade Id (gerada pelo banco de dados)
+                    .ToList();
+
+                // Cria a lista de colunas e valores para a consulta SQL
+                var columns = string.Join(", ", properties.Select(p => p.Name));
+                var values = string.Join(", ", properties.Select(p => $"@{p.Name}"));
+
+                // Monta a consulta SQL
+                string sql = $@"
+                    INSERT INTO {tableName} ({columns})
+                    VALUES ({values});
+                    SELECT CAST(SCOPE_IDENTITY() AS INT);";
                 await _dbConnection.ExecuteAsync(sql, entity);
             }
             catch (DbException ex)
@@ -79,7 +99,25 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"INSERT INTO {typeof(T).Name} OUTPUT INSERTED.Id DEFAULT VALUES;";
+                string tableName = TableNameHelper.GetTableName<T>();
+
+                // Obtém as propriedades da entidade
+                var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.Name != "Id") // Ignora a propriedade Id (gerada pelo banco de dados)
+                    .ToList();
+
+                // Cria a lista de colunas e valores para a consulta SQL
+                var columns = string.Join(", ", properties.Select(p => p.Name));
+                var values = string.Join(", ", properties.Select(p => $"@{p.Name}"));
+
+
+                // Monta a consulta SQL
+                string sql = $@"
+                    INSERT INTO {tableName} ({columns})
+                    VALUES ({values});
+                    SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+                // Executa a consulta e retorna o ID gerado
                 return await _dbConnection.ExecuteScalarAsync<int>(sql, entity);
             }
             catch (DbException ex)
@@ -93,8 +131,38 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"UPDATE {typeof(T).Name} SET /* Definir colunas */ WHERE Id = @Id";
-                await _dbConnection.ExecuteAsync(sql, entity);
+                string tableName = TableNameHelper.GetTableName<T>();
+
+                // Suponha que você tenha uma lista de propriedades
+                // Obtém as propriedades da entidade
+                var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.Name != "Id") // Ignora a propriedade Id (gerada pelo banco de dados)
+                    .ToList();
+
+                // Cria a lista de colunas e valores para a consulta SQL
+                var columns = string.Join(", ", properties.Select(p => p.Name));
+                var values = string.Join(", ", properties.Select(p => $"@{p.Name}"));
+
+                string query = $"UPDATE {tableName} SET ";
+
+                // Itera sobre cada propriedade
+                foreach (var prop in properties)
+                {
+                    // Adiciona o nome da propriedade como coluna
+                    // Adiciona o valor da propriedade como parâmetro SQL
+                    query += $"{prop.Name} = @{prop.Name}";
+
+                    // Verifica se não é o último item
+                    if (!prop.Equals(properties.Last()))
+                    {
+                        query += ", ";
+                    }
+                }
+
+                query += " WHERE Id = @Id";
+
+                // Agora você pode usar columnsString e valuesString na sua consulta SQL
+                await _dbConnection.ExecuteAsync(query, entity);
             }
             catch (DbException ex)
             {
@@ -106,7 +174,8 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
         {
             try
             {
-                string sql = $"DELETE FROM {typeof(T).Name} WHERE Id = @Id";
+                string tableName = TableNameHelper.GetTableName<T>();
+                string sql = $"DELETE FROM {tableName} WHERE Id = @Id";
                 await _dbConnection.ExecuteAsync(sql, new { Id = id });
             }
             catch (DbException ex)
