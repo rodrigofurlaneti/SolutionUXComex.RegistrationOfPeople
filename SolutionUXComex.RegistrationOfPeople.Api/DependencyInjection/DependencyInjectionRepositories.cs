@@ -23,6 +23,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Api.DependencyInjection
 
             // Registro de repositórios específicos
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             return services;
         }

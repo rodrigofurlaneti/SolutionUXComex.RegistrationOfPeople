@@ -7,6 +7,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
     {
         private static readonly Dictionary<Type, string> TableNames = new()
         {
+            { typeof(AddressEntity), "Addresses" }, // Mapeia PersonEntity para "Persons"
             { typeof(PersonEntity), "Persons" } // Mapeia PersonEntity para "Persons"
         };
 

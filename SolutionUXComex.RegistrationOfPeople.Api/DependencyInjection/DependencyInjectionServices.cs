@@ -10,6 +10,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Api.DependencyInjection
         {
             // Registro de serviços específicos
             services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IAddressService, AddressService>();
 
             return services;
         }
