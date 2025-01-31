@@ -31,6 +31,13 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
             return addressEntity == null ? null : AddressMapper.ToDto(addressEntity);
         }
 
+        public async Task<List<AddressDto>> GetByPersonIdAsync(int personId)
+        {
+            var listAddressEntity = await _repository.GetByPersonIdAsync(personId);
+            var retAddressDto = AddressMapper.ToListDto(listAddressEntity);
+            return retAddressDto;
+        }
+
         public async Task<int> AddAsync(AddressDto addressDto)
         {
             var addressEntity = AddressMapper.ToEntity(addressDto);

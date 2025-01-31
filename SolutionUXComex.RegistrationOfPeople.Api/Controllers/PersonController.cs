@@ -44,7 +44,15 @@ namespace SolutionUXComex.RegistrationOfPeople.Api.Controllers
         public async Task<IActionResult> Add(PersonDto personDto)
         {
             var id = await _service.AddAsync(personDto);
-            return CreatedAtAction(nameof(GetById), new { id }, personDto);
+            if(id > 0)
+            {
+                personDto.Id = id;
+                return CreatedAtAction(nameof(GetById), new { id }, personDto);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         [HttpPut("{id}")]

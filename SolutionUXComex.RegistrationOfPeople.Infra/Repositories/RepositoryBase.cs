@@ -12,7 +12,7 @@ namespace SolutionUXComex.RegistrationOfPeople.Infra.Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private readonly IDbConnection _dbConnection;
+        protected readonly IDbConnection _dbConnection; // 🔹 Agora protegido, permitindo acesso em classes derivadas
         private readonly ILogger<RepositoryBase<T>> _logger;
 
         public RepositoryBase(IDbConnection dbConnection, ILogger<RepositoryBase<T>> logger)

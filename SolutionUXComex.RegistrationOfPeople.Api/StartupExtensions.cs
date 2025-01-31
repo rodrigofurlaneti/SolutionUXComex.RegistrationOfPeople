@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.IO; // Necessário para Path.Combine
 
 namespace SolutionUXComex.RegistrationOfPeople.Api
 {
@@ -11,10 +12,18 @@ namespace SolutionUXComex.RegistrationOfPeople.Api
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SolutionUXComex API", Version = "v1" });
+                try
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SolutionUXComex API", Version = "v1" });
 
-                // Adicione o suporte para os atributos de rota
-                c.EnableAnnotations();
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, "API.xml");
+                    c.IncludeXmlComments(xmlPath);
+                    Console.WriteLine($"Swagger XML carregado: {xmlPath}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao configurar Swagger: {ex.Message}");
+                }
             });
         }
 

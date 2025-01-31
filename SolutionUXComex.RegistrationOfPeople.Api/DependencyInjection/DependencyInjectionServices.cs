@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using SolutionUXComex.RegistrationOfPeople.Service.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Service.Services;
 

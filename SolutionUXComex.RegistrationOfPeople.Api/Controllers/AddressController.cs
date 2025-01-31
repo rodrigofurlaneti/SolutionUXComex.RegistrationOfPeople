@@ -38,6 +38,18 @@ namespace SolutionUXComex.RegistrationOfPeople.Api.Controllers
             return Ok(person);
         }
 
+        [HttpGet("ByPersonId/{personId}")] // GET com parâmetro na URL
+        [SwaggerOperation(Summary = "Retorna um lista com todos endereços pelo PersonId informado")]
+        [SwaggerResponse(200, "Endereços pelo PersonId encontrada com sucesso")]
+        [SwaggerResponse(404, "Endereços pelo PersonId encontrada não encontrada com o ID informado")]
+        public async Task<IActionResult> GetByPersonId(int personId)
+        {
+            var listAnddresses = await _service.GetByPersonIdAsync(personId);
+            if (listAnddresses == null)
+                return NotFound();
+            return Ok(listAnddresses);
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Adiciona um endereço ")]
         [SwaggerResponse(201, "Pessoa adicionada com sucesso")]

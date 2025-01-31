@@ -47,10 +47,11 @@ namespace SolutionUXComex.RegistrationOfPeople.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
-            if (env.IsDevelopment() || env.IsProduction())
+            if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SolutionUXComex RegistrationOfPeople API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SolutionUXComex API v1"));
             }
 
             // Aplica a política de CORS antes do roteamento
@@ -58,6 +59,9 @@ namespace SolutionUXComex.RegistrationOfPeople.Api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.ConfigureExceptionHandling(env); // Configuração de exceções e Swagger
+
 
             // Executar Migrations no startup
             //using (var scope = serviceProvider.CreateScope())
