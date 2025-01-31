@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace SolutionUXComex.RegistrationOfPeople.Api.DependencyInjection
 {

@@ -1,4 +1,5 @@
-﻿using SolutionUXComex.RegistrationOfPeople.Service.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SolutionUXComex.RegistrationOfPeople.Service.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Service.Services;
 
 namespace SolutionUXComex.RegistrationOfPeople.Api.DependencyInjection

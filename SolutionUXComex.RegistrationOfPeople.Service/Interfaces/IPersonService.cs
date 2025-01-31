@@ -6,9 +6,8 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Interfaces
     {
         Task<IEnumerable<PersonDto>> GetAllAsync();
         Task<PersonDto?> GetByIdAsync(int id);
-        Task AddAsync(PersonDto categoryDto);
-        Task UpdateAsync(int id, PersonDto categoryDto);
-        Task DeleteAsync(int id);
+        Task<int> AddAsync(PersonDto personDto);
+        Task<bool> UpdateAsync(int id, PersonDto personDto);
+        Task<bool> DeleteAsync(int id);
     }
-
 }

@@ -17,52 +17,57 @@ namespace SolutionUXComex.RegistrationOfPeople.Api.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Retorna todos pessoas de acesso")]
-        [SwaggerResponse(200, "Retorna todos pessoas de acesso")]
-        [SwaggerResponse(404, "Não retorna todos pessoas de acesso")]
+        [SwaggerOperation(Summary = "Retorna todas as pessoas")]
+        [SwaggerResponse(200, "Lista de pessoas retornada com sucesso")]
+        [SwaggerResponse(404, "Nenhuma pessoa encontrada")]
         public async Task<IActionResult> GetAll()
         {
-            var accessLogs = await _service.GetAllAsync();
-            return Ok(accessLogs);
+            var people = await _service.GetAllAsync();
+            return Ok(people);
         }
 
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Retorna o pessoa de acesso do id informado")]
-        [SwaggerResponse(200, "Retorna o pessoa de acesso do id informado")]
-        [SwaggerResponse(404, "Não retorna o pessoa de acesso com o id informado")]
+        [SwaggerOperation(Summary = "Retorna uma pessoa pelo ID informado")]
+        [SwaggerResponse(200, "Pessoa encontrada com sucesso")]
+        [SwaggerResponse(404, "Pessoa não encontrada com o ID informado")]
         public async Task<IActionResult> GetById(int id)
         {
-            var accessLogDto = await _service.GetByIdAsync(id);
-            return Ok(accessLogDto);
+            var person = await _service.GetByIdAsync(id);
+            if (person == null)
+                return NotFound();
+            return Ok(person);
         }
 
         [HttpPost]
-        [SwaggerOperation(Summary = "Adiciona um novo pessoa de acesso")]
-        [SwaggerResponse(200, "Adiciona um novo pessoa de acesso")]
-        [SwaggerResponse(404, "Não adiciona um novo pessoa de acesso")]
-        public async Task<IActionResult> Add(PersonDto accessLogDto)
+        [SwaggerOperation(Summary = "Adiciona uma nova pessoa")]
+        [SwaggerResponse(201, "Pessoa adicionada com sucesso")]
+        public async Task<IActionResult> Add(PersonDto personDto)
         {
-            await _service.AddAsync(accessLogDto);
-            return CreatedAtAction(nameof(GetById), new { id = accessLogDto.Id }, accessLogDto);
+            var id = await _service.AddAsync(personDto);
+            return CreatedAtAction(nameof(GetById), new { id }, personDto);
         }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Atualiza o pessoa de acesso do id informado")]
-        [SwaggerResponse(200, "Atualiza o pessoa de acesso do id informado")]
-        [SwaggerResponse(404, "Não atualiza o pessoa de acesso do id informado")]
-        public async Task<IActionResult> Update(int id, PersonDto accessLogDto)
+        [SwaggerOperation(Summary = "Atualiza uma pessoa pelo ID informado")]
+        [SwaggerResponse(204, "Pessoa atualizada com sucesso")]
+        [SwaggerResponse(404, "Pessoa não encontrada com o ID informado")]
+        public async Task<IActionResult> Update(int id, PersonDto personDto)
         {
-            await _service.UpdateAsync(id, accessLogDto);
+            var updated = await _service.UpdateAsync(id, personDto);
+            if (!updated)
+                return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Exclui o pessoa de acesso do id informado")]
-        [SwaggerResponse(200, "Exclui o pessoa de acesso do id informado")]
-        [SwaggerResponse(404, "Não exclui o pessoa de acesso do id informado")]
+        [SwaggerOperation(Summary = "Exclui uma pessoa pelo ID informado")]
+        [SwaggerResponse(204, "Pessoa excluída com sucesso")]
+        [SwaggerResponse(404, "Pessoa não encontrada com o ID informado")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteAsync(id);
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted)
+                return NotFound();
             return NoContent();
         }
     }

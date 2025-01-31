@@ -2,9 +2,11 @@
 using SolutionUXComex.RegistrationOfPeople.Service.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Domain.Interfaces;
 using SolutionUXComex.RegistrationOfPeople.Domain.Entities;
-using System.Net;
+using SolutionUXComex.RegistrationOfPeople.Service.Mappers;
 using System;
-using System.Reflection.Emit;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SolutionUXComex.RegistrationOfPeople.Service.Services
 {
@@ -20,124 +22,40 @@ namespace SolutionUXComex.RegistrationOfPeople.Service.Services
         public async Task<IEnumerable<PersonDto>> GetAllAsync()
         {
             var persons = await _repository.GetAllAsync();
-            return persons.Select(person => new PersonDto
-            {
-                Id = person.Id,
-                Name = person.Name,
-                Cpf = person.Cpf,
-                Phone = person.Phone,
-                ZipCode = person.ZipCode,
-                Address = person.Address,
-                Number = person.Number,
-                Complement = person.Complement,
-                Neighborhood = person.Neighborhood,
-                City = person.City,
-                State = person.State,
-                CreatedAt = person.CreatedAt,
-                UpdatedAt = person.UpdatedAt,
-                Active = person.Active
-            });
+            return persons.Select(PersonMapper.ToDto);
         }
 
         public async Task<PersonDto?> GetByIdAsync(int id)
         {
             var personEntity = await _repository.GetByIdAsync(id);
-            if (personEntity == null)
-                return null;
-
-            return SetPersonDto(personEntity);
+            return personEntity == null ? null : PersonMapper.ToDto(personEntity);
         }
 
-        public async Task<int> AddReturnIdAsync(PersonDto personDto)
+        public async Task<int> AddAsync(PersonDto personDto)
         {
-            var personEntity = SetPersonEntity_Insert(personDto);
-            var entityId = await _repository.AddReturnIdAsync(personEntity);
-            return entityId;
+            var personEntity = PersonMapper.ToEntity(personDto);
+            return await _repository.AddReturnIdAsync(personEntity);
         }
 
-        public async Task AddAsync(PersonDto PersonDto)
-        {
-            var PersonEntity = SetPersonEntity_Insert(PersonDto);
-            await _repository.AddAsync(PersonEntity);
-        }
-
-
-        public async Task UpdateAsync(int id, PersonDto personDto)
+        public async Task<bool> UpdateAsync(int id, PersonDto personDto)
         {
             var personEntity = await _repository.GetByIdAsync(id);
             if (personEntity == null)
-                throw new ArgumentException($"Person with ID {id} not found");
+                return false;
 
-            var updatedEntity = SetPersonEntity_Update(personEntity, personDto);
+            var updatedEntity = PersonMapper.ToEntity(personDto);
             await _repository.UpdateAsync(updatedEntity);
+            return true;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
+            var personEntity = await _repository.GetByIdAsync(id);
+            if (personEntity == null)
+                return false;
+
             await _repository.DeleteAsync(id);
-        }
-
-        // Mapeia de PersonEntity para PersonDto
-        private PersonDto SetPersonDto(PersonEntity person)
-        {
-            return new PersonDto
-            {
-                Id = person.Id,
-                Name = person.Name,
-                Cpf = person.Cpf,
-                Phone = person.Phone,
-                ZipCode = person.ZipCode,
-                Address = person.Address,
-                Number = person.Number,
-                Complement = person.Complement,
-                Neighborhood = person.Neighborhood,
-                City = person.City,
-                State = person.State,
-                CreatedAt = person.CreatedAt,
-                UpdatedAt = person.UpdatedAt,
-                Active = person.Active
-            };
-        }
-
-        // Cria uma nova entidade para inserção
-        private PersonEntity SetPersonEntity_Insert(PersonDto person)
-        {
-            return new PersonEntity
-            {
-                Id = person.Id,
-                Name = person.Name,
-                Cpf = person.Cpf,
-                Phone = person.Phone,
-                ZipCode = person.ZipCode,
-                Address = person.Address,
-                Number = person.Number,
-                Complement = person.Complement,
-                Neighborhood = person.Neighborhood,
-                City = person.City,
-                State = person.State,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                Active = person.Active
-            };
-        }
-
-        // Atualiza uma entidade existente com novos dados
-        private PersonEntity SetPersonEntity_Update(PersonEntity existingEntity, PersonDto personDto)
-        {
-            existingEntity.Id = personDto.Id;
-            existingEntity.Name = personDto.Name;
-            existingEntity.Cpf = personDto.Cpf;
-            existingEntity.Phone = personDto.Phone;
-            existingEntity.Address = personDto.Address;
-            existingEntity.ZipCode = personDto.ZipCode;
-            existingEntity.Number = personDto.Number;
-            existingEntity.Complement = personDto.Complement;
-            existingEntity.Neighborhood = personDto.Neighborhood;
-            existingEntity.City = personDto.City;
-            existingEntity.State = personDto.State;
-            existingEntity.UpdatedAt = DateTime.Now;
-            existingEntity.Active = personDto.Active;
-            return existingEntity;
+            return true;
         }
     }
 }
