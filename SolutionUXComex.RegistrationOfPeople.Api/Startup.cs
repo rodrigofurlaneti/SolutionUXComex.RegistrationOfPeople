@@ -60,11 +60,11 @@ namespace SolutionUXComex.RegistrationOfPeople.Api
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             // Executar Migrations no startup
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-                dbInitializer.ApplyMigrationsAsync().Wait();
-            }
+            //using (var scope = serviceProvider.CreateScope())
+            //{
+            //    var dbInitializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+            //    dbInitializer.ApplyMigrationsAsync().Wait();
+            //}
         }
     }
 }
